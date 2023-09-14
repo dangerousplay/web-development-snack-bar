@@ -39,3 +39,17 @@ yarn
 yarn dev
 yarn test
 ```
+
+
+
+# Exercise
+
+Montar uma página em HTML no repl.it para informações a respeito de um Snack
+Bar de um cinema.
+
+- Essa página deve ter um título "Produtos para aproveitar enquanto assiste a um bom filme"
+Esse título deve ser em fonte cor azul.
+- No lado esquerdo deve ter uma imagem que representa um cinema. Observe que a figura não deve ficar desformatada.
+- Deve ter um texto introdutório "Aproveite para comprar suas bebidas, pipocas, petiscos e doces para saborear enquanto assiste a um filme"
+- Deve ter uma tabela ou uma lista com o título "Produtos disponíveis".
+- O usuário poderá informar a qtde de cada produto e ao informar deverá ser calculado o valor do item.
