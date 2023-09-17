@@ -1,43 +1,59 @@
 name: UI CI
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
 
 jobs:
-  lint:
-    runs-on: ubuntu-22.04
-    name: Lint
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: yarn
-      - run: yarn lint
+  # Build job
   build:
-    runs-on: ubuntu-22.04
-    needs: lint
-    name: Build
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
         with:
-          node-version: '18'
-      - run: yarn
-      - run: yarn build
-  test:
-    runs-on: ubuntu-22.04
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Build with Next.js
+        run: pnpm build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./out
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     needs: build
-    name: Test
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: yarn
-      - run: yarn test
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
