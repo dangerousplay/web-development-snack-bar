@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useRef } from 'react'
+import React, { ReactElement, useState, useRef } from "react"
 
 
 import soda500ml from '../assets/soda_500ml.webp'
@@ -106,7 +106,7 @@ const ShoppingItems = () => {
   const [shoppingCart, setShoppingCart] = useState({})
 
   console.log("Values", Object.values(shoppingCart))
-  const shoppingCartValues = Object.values(shoppingCart)
+  const shoppingCartValues: number[] = Object.values(shoppingCart)
 
   const totalCost = shoppingCartValues.length > 0 ?
     shoppingCartValues.reduce((a,b) => a + b) :
