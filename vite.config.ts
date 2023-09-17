@@ -9,7 +9,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
   };
 
   if (command == "build") {
-    config.base = "/web-development-snack-bar"
+    config.base = "/web-development-snack-bar/"
   }
 
   return config
